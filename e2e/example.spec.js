@@ -21,17 +21,13 @@ test('get started link', async ({ page }) => {
 test('has footer copyright', async ({ page }) => {
   await page.goto('https://playwright.dev/');
 
-  // Expect a footer "to contain" a substring.
   await expect(page.locator('div.footer__copyright')).toHaveText(/(Copyright|©)\s*20\d{2}[\s.,-]*Microsoft/i);
 });
 
 test('has loglist 9 logos', async ({ page }) => {
   await page.goto('https://playwright.dev/');
 
-  // Seleziona la lista ul.logolist
   const logoList = page.locator('ul[class^="logosList_"]');
-
-  // Conta quanti li ci sono dentro
   const listItems = logoList.locator('li');
 
   await expect(listItems).toHaveCount(9)
@@ -42,7 +38,6 @@ test('has docs installing playwright', async ({ page }) => {
 
   const heading = page.locator('h2#installing-playwright');
 
-  // Verifica che contenga esattamente la stringa desiderata
   await expect(heading).toHaveText('Installing Playwright');
 });
 
@@ -52,4 +47,22 @@ test('navigates from home to docs', async ({ page }) => {
   await page.getByRole('link', { name: 'Docs' }).click();
 
   await expect(page).toHaveTitle('Installation | Playwright');
+});
+
+test('opens modal on DocSearch button click', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+
+  await page.locator('.DocSearch-Button').click()
+
+  await page.keyboard.press('Control+k');
+
+  const searchInput = page.locator('input.DocSearch-Input');
+
+  await expect(searchInput).toBeVisible();
+
+  await searchInput.fill('annotation');
+
+  const results = page.locator('.DocSearch-Hits [role="option"]');
+
+  await expect(results).toContainText('annotation');
 });
