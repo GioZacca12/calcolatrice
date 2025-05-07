@@ -36,3 +36,20 @@ test('has loglist 9 logos', async ({ page }) => {
 
   await expect(listItems).toHaveCount(9)
 });
+
+test('has docs installing playwright', async ({ page }) => {
+  await page.goto('https://playwright.dev/docs/intro');
+
+  const heading = page.locator('h2#installing-playwright');
+
+  // Verifica che contenga esattamente la stringa desiderata
+  await expect(heading).toHaveText('Installing Playwright');
+});
+
+test('navigates from home to docs', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+
+  await page.getByRole('link', { name: 'Docs' }).click();
+
+  await expect(page).toHaveTitle('Installation | Playwright');
+});
